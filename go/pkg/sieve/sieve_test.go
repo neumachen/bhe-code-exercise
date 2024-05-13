@@ -8,15 +8,45 @@ import (
 )
 
 func TestNthPrime(t *testing.T) {
+	testData := []struct {
+		nthPrime int64
+		expected int64
+	}{
+		{
+			nthPrime: 0,
+			expected: 2,
+		},
+		{
+			nthPrime: 19,
+			expected: 67,
+		},
+		{
+			nthPrime: 99,
+			expected: 523,
+		},
+		{
+			nthPrime: 500,
+			expected: 3571,
+		},
+		{
+			nthPrime: 986,
+			expected: 7789,
+		},
+		{
+			nthPrime: 2000,
+			expected: 17389,
+		},
+		{
+			nthPrime: 1000000,
+			expected: 15485863,
+		},
+	}
 	sieve := NewSieve()
 
-	assert.Equal(t, int64(2), sieve.NthPrime(0))
-	assert.Equal(t, int64(67), sieve.NthPrime(19))
-	assert.Equal(t, int64(523), sieve.NthPrime(99))
-	assert.Equal(t, int64(3571), sieve.NthPrime(500))
-	assert.Equal(t, int64(7789), sieve.NthPrime(986))
-	assert.Equal(t, int64(17389), sieve.NthPrime(2000))
-	assert.Equal(t, int64(15485863), sieve.NthPrime(1000000))
+	for i := range testData {
+		tData := testData[i]
+		assert.Equal(t, tData.expected, sieve.NthPrime(tData.nthPrime))
+	}
 }
 
 func FuzzNthPrime(f *testing.F) {
