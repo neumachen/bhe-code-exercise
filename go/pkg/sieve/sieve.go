@@ -103,9 +103,10 @@ func NthPrime(nth int64) (int64, error) {
 		) // There is no such thing as a negative prime, so return 0 for invalid input.
 	}
 
-	// Estimate the upper limit for the prime number calculation using the Prime Number Theorem.
+	// set a limit of 1000 if nth is 100 to avoid generating less primes than the given nth.
 	limit := 1000
 	if nth > 100 {
+		// Estimate the upper limit for the prime number calculation using the Prime Number Theorem.
 		nthFloat := float64(nth)
 		limit = int(nthFloat * (math.Log(nthFloat) + math.Log(math.Log(nthFloat))))
 	}
