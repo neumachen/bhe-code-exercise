@@ -5,9 +5,14 @@ import (
 	"math"
 )
 
-// Sieve is an interface that defines the functionality for finding the nth prime number.
-// It includes a single method, NthPrime, which takes an integer n and returns the nth prime number as an int64.
+// Sieve is an interface that specifies the method for retrieving prime numbers.
+// It is designed to allow different implementations for finding prime numbers based
+// on their ordinal position in the sequence of all primes.
 type Sieve interface {
+	//	NthPrime(n int64) (int64, error) - Retrieves the nth prime number, where n is the zero-based index.
+	//	This means NthPrime(0) should return 2, NthPrime(1) should return 3, and so on.
+	//	The method returns an int64 representing the nth prime number and an error if the input is invalid
+	//	(e.g., negative) or if the nth prime cannot be determined within the constraints of the implementation.
 	NthPrime(n int64) (int64, error)
 }
 
