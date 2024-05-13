@@ -1,0 +1,20 @@
+version: "3.9"
+
+
+services:
+  build:
+    image: spectre-ops/bhe-code-exercise_go
+    build:
+      context: go
+      
+  test:
+    depends_on:
+      - build
+    image: spectre-ops/bhe-code-exercise_go
+    command: go test -v ./...
+
+  benchmark:
+    depends_on:
+      - build
+    image: spectre-ops/bhe-code-exercise_go
+    command: go test -v -bench=. ./...
