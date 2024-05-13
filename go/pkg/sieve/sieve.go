@@ -99,7 +99,7 @@ func sieve(limit int) []int {
 func NthPrime(nth int64) (int64, error) {
 	if nth < 0 {
 		return 0, fmt.Errorf(
-			"Invalid input: Prime number indices must be non-negative. Please provide a zero or positive integer.",
+			"invalid input: prime number indices must be non-negative, please provide a zero or positive integer",
 		) // There is no such thing as a negative prime, so return 0 for invalid input.
 	}
 

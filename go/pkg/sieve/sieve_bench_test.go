@@ -29,7 +29,7 @@ func BenchmarkNthPrime(b *testing.B) {
 
 	for i := range testCases {
 		testCase := testCases[i]
-		b.Run(fmt.Sprintf("%s", testCase.name), func(b *testing.B) {
+		b.Run(testCase.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
 				_, err := sieve.NthPrime(testCase.nth)
 				assert.NoError(
