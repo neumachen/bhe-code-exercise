@@ -1,6 +1,7 @@
 package sieve
 
 import (
+	"fmt"
 	"math/big"
 	"testing"
 
@@ -29,16 +30,64 @@ func TestNthPrime_Success(t *testing.T) {
 			expected: 2,
 		},
 		{
+			nthPrime: 1,
+			expected: 3,
+		},
+		{
+			nthPrime: 2,
+			expected: 5,
+		},
+		{
+			nthPrime: 5,
+			expected: 13,
+		},
+		{
+			nthPrime: 10,
+			expected: 31,
+		},
+		{
 			nthPrime: 19,
 			expected: 71,
+		},
+		{
+			nthPrime: 25,
+			expected: 101,
+		},
+		{
+			nthPrime: 38,
+			expected: 167,
+		},
+		{
+			nthPrime: 44,
+			expected: 197,
+		},
+		{
+			nthPrime: 52,
+			expected: 241,
+		},
+		{
+			nthPrime: 66,
+			expected: 331,
 		},
 		{
 			nthPrime: 99,
 			expected: 541,
 		},
 		{
+			nthPrime: 150,
+			expected: 877,
+		},
+		{
+			nthPrime: 200,
+			expected: 1229,
+		},
+		{
 			nthPrime: 500,
 			expected: 3581,
+		},
+		{
+			nthPrime: 800,
+			expected: 6143,
 		},
 		{
 			nthPrime: 986,
@@ -47,6 +96,18 @@ func TestNthPrime_Success(t *testing.T) {
 		{
 			nthPrime: 2000,
 			expected: 17393,
+		},
+		{
+			nthPrime: 5000,
+			expected: 48619,
+		},
+		{
+			nthPrime: 10000,
+			expected: 104743,
+		},
+		{
+			nthPrime: 100000,
+			expected: 1299721,
 		},
 		{
 			nthPrime: 1000000,
@@ -59,7 +120,7 @@ func TestNthPrime_Success(t *testing.T) {
 		tData := testData[i]
 		actual, err := sieve.NthPrime(tData.nthPrime)
 		assert.NoError(t, err)
-		assert.Equal(t, tData.expected, actual)
+		assert.Equal(t, tData.expected, actual, fmt.Sprintf("nth prime: %d", tData.nthPrime))
 	}
 }
 
