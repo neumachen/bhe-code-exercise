@@ -10,13 +10,13 @@ import (
 func TestNthPrime(t *testing.T) {
 	sieve := NewSieve()
 
-	assert.Equal(t, 2, sieve.NthPrime(0))
-	assert.Equal(t, 71, sieve.NthPrime(19))
-	assert.Equal(t, 541, sieve.NthPrime(99))
-	assert.Equal(t, 3581, sieve.NthPrime(500))
-	assert.Equal(t, 7793, sieve.NthPrime(986))
-	assert.Equal(t, 17393, sieve.NthPrime(2000))
-	assert.Equal(t, 15485867, sieve.NthPrime(1000000))
+	assert.Equal(t, int64(2), sieve.NthPrime(0))
+	assert.Equal(t, int64(67), sieve.NthPrime(19))
+	assert.Equal(t, int64(523), sieve.NthPrime(99))
+	assert.Equal(t, int64(3571), sieve.NthPrime(500))
+	assert.Equal(t, int64(7789), sieve.NthPrime(986))
+	assert.Equal(t, int64(17389), sieve.NthPrime(2000))
+	assert.Equal(t, int64(15485863), sieve.NthPrime(1000000))
 }
 
 func FuzzNthPrime(f *testing.F) {
