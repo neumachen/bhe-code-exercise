@@ -1,9 +1,14 @@
 package sieve
 
+import (
+	"fmt"
+	"math"
+)
+
 // Sieve is an interface that defines the functionality for finding the nth prime number.
 // It includes a single method, NthPrime, which takes an integer n and returns the nth prime number as an int64.
 type Sieve interface {
-	NthPrime(n int64) int64
+	NthPrime(n int64) (int64, error)
 }
 
 // NewSieve creates and returns an instance of Sieve.
@@ -17,13 +22,13 @@ func NewSieve() Sieve {
 // siever is a function type that takes an int64 and returns an int64, designed to calculate the nth prime number.
 // It implements the Sieve interface, allowing function types to be used directly in places where Sieve is expected,
 // promoting a functional programming approach within a structured interface.
-type siever func(n int64) int64
+type siever func(n int64) (int64, error)
 
 // NthPrime is a method on the siever type that implements the Sieve interface's NthPrime method.
 // It directly invokes the function represented by the siever instance to compute the nth prime number.
 // This design leverages Go's first-class functions to dynamically specify the behavior of the NthPrime method at runtime,
 // increasing the code's modularity and flexibility.
-func (s siever) NthPrime(n int64) int64 {
+func (s siever) NthPrime(n int64) (int64, error) {
 	return s(n)
 }
 
@@ -65,25 +70,30 @@ func sieve(limit int) []int {
 	return primes
 }
 
-// NthPrime finds the nth prime number by dynamically adjusting the search range until the nth prime is located.
-// This function starts with a guess for the number of primes needed (initially setting the limit to 100) and doubles
-// this limit each time the array of primes produced by the sieve function does not contain enough primes.
-// The rationale for dynamically adjusting the range is to efficiently handle requests for high-order primes without
-// using excessive memory or processing power on unnecessarily large ranges.
-func NthPrime(nth int64) int64 {
+// NthPrime calculates the nth prime number using an optimized sieve method based on the Prime Number Theorem. It
+// dynamically adjusts the number range to sieve, ensuring efficient memory and time utilization. The function initially
+// calculates an upper limit for the sieve using the Prime Number Theorem, which states that the nth prime is
+// approximately n * (log n + log log n). This estimation ensures that the sieve operation is not wastefully large,
+// balancing between performance and memory usage. If the calculated primes are fewer than required, the function
+// returns an error indicating the estimation fell short. This ensures that any limitations of the Prime Number
+// Theorem's approximation in practical scenarios are communicated back to the caller
+func NthPrime(nth int64) (int64, error) {
 	if nth < 1 {
 		if nth == 0 {
-			return 2 // short circuit when nth is 0
+			return 2, nil // short circuit when nth is 0
 		}
-		return 0 // There is no such thing as a zeroth prime, so return 0 for invalid input.
+		return 0, nil // There is no such thing as a zeroth prime, so return 0 for invalid input.
 	}
 
-	limit := 100
-	for {
-		primes := sieve(limit)         // Generate primes up to the current limit.
-		if int64(len(primes)) >= nth { // Check if the generated list has enough primes.
-			return int64(primes[nth-1]) // Return the nth prime if we have enough primes.
-		}
-		limit *= 2 // If not enough primes were generated, double the limit and try again.
+	// original implementation
+	// limit := 1000
+
+	// Estimate the upper limit for the prime number calculation using the Prime Number Theorem.
+	nthFloat := float64(nth)
+	limit := int(nthFloat * (math.Log(nthFloat) + math.Log(math.Log(nthFloat))))
+	primes := sieve(limit)
+	if len(primes) < int(nth) {
+		return 0, fmt.Errorf("prime number list generated up to %d does not contain %d primes", limit, nth)
 	}
+	return int64(primes[nth-1]), nil
 }

@@ -45,7 +45,9 @@ func TestNthPrime(t *testing.T) {
 
 	for i := range testData {
 		tData := testData[i]
-		assert.Equal(t, tData.expected, sieve.NthPrime(tData.nthPrime))
+		actual, err := sieve.NthPrime(tData.nthPrime)
+		assert.NoError(t, err)
+		assert.Equal(t, tData.expected, actual)
 	}
 }
 
@@ -53,7 +55,9 @@ func FuzzNthPrime(f *testing.F) {
 	sieve := NewSieve()
 
 	f.Fuzz(func(t *testing.T, n int64) {
-		if !big.NewInt(sieve.NthPrime(n)).ProbablyPrime(0) {
+		actual, err := sieve.NthPrime(n)
+		assert.NoError(t, err)
+		if !big.NewInt(actual).ProbablyPrime(0) {
 			t.Errorf("the sieve produced a non-prime number at index %d", n)
 		}
 	})
