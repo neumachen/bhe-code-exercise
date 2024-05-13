@@ -18,27 +18,27 @@ func TestNthPrime(t *testing.T) {
 		},
 		{
 			nthPrime: 19,
-			expected: 67,
+			expected: 71,
 		},
 		{
 			nthPrime: 99,
-			expected: 523,
+			expected: 541,
 		},
 		{
 			nthPrime: 500,
-			expected: 3571,
+			expected: 3581,
 		},
 		{
 			nthPrime: 986,
-			expected: 7789,
+			expected: 7793,
 		},
 		{
 			nthPrime: 2000,
-			expected: 17389,
+			expected: 17393,
 		},
 		{
 			nthPrime: 1000000,
-			expected: 15485863,
+			expected: 15485867,
 		},
 	}
 	sieve := NewSieve()
