@@ -60,7 +60,7 @@ func sieve(limit int) []int {
 	}
 
 	// Extract prime numbers from the sieve.
-	var primes []int
+	primes := make([]int, 0, limit/2)
 	for i, prime := range isPrime {
 		if prime {
 			primes = append(primes, i) // Append the index of true entries to the result slice.
@@ -70,30 +70,43 @@ func sieve(limit int) []int {
 	return primes
 }
 
-// NthPrime calculates the nth prime number using an optimized sieve method based on the Prime Number Theorem. It
-// dynamically adjusts the number range to sieve, ensuring efficient memory and time utilization. The function initially
-// calculates an upper limit for the sieve using the Prime Number Theorem, which states that the nth prime is
-// approximately n * (log n + log log n). This estimation ensures that the sieve operation is not wastefully large,
-// balancing between performance and memory usage. If the calculated primes are fewer than required, the function
-// returns an error indicating the estimation fell short. This ensures that any limitations of the Prime Number
-// Theorem's approximation in practical scenarios are communicated back to the caller
+// NthPrime calculates the nth prime number using an optimized approach
+// that combines a static limit with a dynamic limit based on the Prime Number Theorem.
+//
+// Parameters:
+//
+//	nth - The zero-based index of the prime number to be retrieved.
+//
+// Returns:
+//
+//	int64 - The nth prime number.
+//	error - Error if the input is invalid (nth < 0) or if the prime could not be found within the estimated range.
+//
+// The function first checks if the input index is negative, which is not valid for prime indices.
+// A static limit of 1000 is initially used for calculating primes. This static limit works well for small values
+// of nth (typically up to the 100th prime) and helps to optimize performance for most common use cases by avoiding
+// unnecessary computation of large prime lists.
+//
+// If nth is greater than 100, indicating that a larger prime is required, the function uses the Prime Number Theorem
+// to dynamically calculate an appropriate limit. This theorem provides a well-accepted approximation for the nth prime:
+// nth * (log(nth) + log(log(nth))). This dynamic adjustment of the limit ensures that the sieve algorithm is both
+// efficient and sufficient to calculate higher prime numbers without consuming excessive resources.
 func NthPrime(nth int64) (int64, error) {
-	if nth < 1 {
-		if nth == 0 {
-			return 2, nil // short circuit when nth is 0
-		}
-		return 0, nil // There is no such thing as a zeroth prime, so return 0 for invalid input.
+	if nth < 0 {
+		return 0, fmt.Errorf(
+			"Invalid input: Prime number indices must be non-negative. Please provide a zero or positive integer.",
+		) // There is no such thing as a negative prime, so return 0 for invalid input.
 	}
 
-	// original implementation
-	// limit := 1000
-
 	// Estimate the upper limit for the prime number calculation using the Prime Number Theorem.
-	nthFloat := float64(nth)
-	limit := int(nthFloat * (math.Log(nthFloat) + math.Log(math.Log(nthFloat))))
+	limit := 1000
+	if nth > 100 {
+		nthFloat := float64(nth)
+		limit = int(nthFloat * (math.Log(nthFloat) + math.Log(math.Log(nthFloat))))
+	}
 	primes := sieve(limit)
 	if len(primes) < int(nth) {
 		return 0, fmt.Errorf("prime number list generated up to %d does not contain %d primes", limit, nth)
 	}
-	return int64(primes[nth-1]), nil
+	return int64(primes[nth]), nil
 }
