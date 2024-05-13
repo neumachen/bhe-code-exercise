@@ -7,7 +7,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNthPrime(t *testing.T) {
+func TestNthPrime_Fail(t *testing.T) {
+	t.Parallel()
+
+	sieve := NewSieve()
+
+	actual, err := sieve.NthPrime(-1)
+	assert.Error(t, err)
+	assert.Empty(t, actual)
+}
+
+func TestNthPrime_Success(t *testing.T) {
+	t.Parallel()
+
 	testData := []struct {
 		nthPrime int64
 		expected int64
@@ -55,6 +67,7 @@ func FuzzNthPrime(f *testing.F) {
 	sieve := NewSieve()
 
 	f.Fuzz(func(t *testing.T, n int64) {
+		t.Parallel()
 		actual, err := sieve.NthPrime(n)
 		assert.NoError(t, err)
 		if !big.NewInt(actual).ProbablyPrime(0) {
